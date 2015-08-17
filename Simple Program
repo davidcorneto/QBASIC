@@ -1,0 +1,8 @@
+CLS
+REM Simple Program
+input "Masukkan nama anda : ",nama$
+input "Masukkan umur anda : ",umur
+print 
+print "wah nama kamu",nama$
+print "Umurnya ",umur
+end
