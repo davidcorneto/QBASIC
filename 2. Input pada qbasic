@@ -1,0 +1,9 @@
+rem program ini akan menjelaskan tentang cara menginput di qbasic
+
+input nama$
+input umur$
+
+print nama$
+print umur$
+
+rem coba ketikkan perintah di atas di program qbasic yang berada di Google drive coding.ug
