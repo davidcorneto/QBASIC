@@ -1,0 +1,6 @@
+rem tulis kode ini di program qbasic yang ada di google drive
+
+print "TEST PEMROGRAMAN"
+
+rem perintah print digunakan untuk mencetak suatu kata
+rem perintah " REM " digunkan sebagai komentar, jadi di anggap sebagai catatan
