@@ -1,0 +1,10 @@
+Rem contoh program perhitungn luas segitiga
+
+input "Masukkan nilai alas  : ",alas   rem variabel alas digunakan untuk menyimpan nilai alas
+input "Masukkan nilai tinggi: ",tinggi  rem variabel tinggi digunakan untuk menyimpan nilai tinggi segitiga
+Luas=(alas*tinggi)/2
+print
+print "Luas dari segitiganya adalah : ",Luas
+
+
+rem jika ada error coba cek lagi variabel nya. harus sama dengan variabel yang di input. 
