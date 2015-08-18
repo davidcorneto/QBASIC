@@ -1,0 +1,11 @@
+rem variabel dapat di ibaratkan seperti sebuah cangkir atau box yang dapat di isikan nilai tertentu bisa angka atau huruf
+rem yang memberikan nilainya adalah pengguna aplikasi itu sendiri atau programmernya
+rem contoh di bawah ini saya akan membuat sebuah variabel yang bernama gunadarma$ dan bernilai "Aku dari gundar"
+
+gunadarma$="Aku dari gundar"
+
+print gunadarma$
+
+
+rem cobaketikkan kode di atas ke dalam program qbasic apa yang terjadi.
+
