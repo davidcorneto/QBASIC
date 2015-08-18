@@ -1,0 +1,8 @@
+cls
+Rem ini program perhitungan luas lingkran
+
+input "Masukkan Jari-Jari lingkaran : ",jari
+luas=jari*jari*3.14
+print
+print "Ini luas lingkarannya ",luas
+end
