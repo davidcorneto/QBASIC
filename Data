@@ -1,0 +1,304 @@
+10 CLS
+20 TYPE datamahasiswa
+    NMA AS STRING * 15
+    NPM AS STRING * 8
+    KLS AS STRING * 5
+30 END TYPE
+35 DIM NMA AS STRING: DIM NPM AS STRING: DIM opt1 AS STRING: DIM KLS AS STRING: DIM Ket AS STRING: DIM mhs AS datamahasiswa
+40 PRINT STRING$(80, "-")
+50 COLOR 17
+60 PRINT TAB(31); "PROGRAM MAHASISWA"
+70 COLOR 7
+80 PRINT STRING$(80, "-")
+90 PRINT "[1] Isi formulir mahasiswa    [3] Keluar"
+100 PRINT "[2] Lihat data mahasiswa"
+130 PRINT
+140 INPUT "Masukkan pilihan [1/2/3]:"; opt
+150 SELECT CASE opt
+    160 CASE 1
+        170 CLS
+        180 PRINT STRING$(80, "-"): COLOR 17
+        190 PRINT TAB(31); "DATA MAHASISWA": COLOR 7
+        200 PRINT STRING$(80, "-")
+        210 OPEN "ProgramMahasiswa.DAT" FOR APPEND AS #1
+        220 INPUT "Nama Mahasiswa        :  "; mhs.NMA$
+        230 INPUT "Nomor Induk Mahasiswa :  "; mhs.NPM$
+        240 INPUT "Kelas                 :  "; mhs.KLS$
+        250 INPUT "Nilai UTS             :  "; UTS
+        260 INPUT "Nilai UAS             :  "; UAS
+        270
+        280 PRINT
+        290 INPUT "Simpan data [Y/T]?"; opt1
+
+        300 IF opt1 = "Y" OR opt1 = "y" THEN
+            380 PRINT
+            390 WRITE #1, mhs.NMA$, mhs.NPM$, mhs.KLS$, UTS, UAS
+            COLOR 4
+            400 PRINT "file telah disimpan!": COLOR 7
+        410 ELSEIF opt1 = "T" OR opt1 = "t" THEN
+            GOTO 440
+        420 ELSE
+            SOUND 2000, 5
+            PRINT
+            PRINT "Pilihan anda tidak ada!"
+            GOTO 290
+        430 END IF
+
+        440 CLOSE #1
+        445 PRINT
+        450 PRINT "[1] Menu awal    [3] Keluar"
+        460 PRINT "[2] Masukkan lagi"
+        470 INPUT "Masukkan pilihan [1/2/3]: "; opt2
+        480 IF opt2 = 1 THEN
+            GOTO 10
+        490 ELSEIF opt2 = 2 THEN
+            GOTO 170
+        500 ELSEIF opt2 = 3 THEN GOTO 10000
+        505 ELSE
+            SOUND 2000, 5
+            PRINT
+            PRINT "Pilihan anda tidak ada!"
+            PRINT
+            GOTO 470
+        510 END IF
+        '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    CASE 2
+        550 CLS: No = 0
+        560 OPEN "ProgramMahasiswa.DAT" FOR INPUT AS 1
+        565 PRINT STRING$(80, "-"): COLOR 17
+        570 PRINT TAB(32); "DATA MAHASISWA": COLOR 7
+        580 PRINT STRING$(80, "-"): COLOR 2
+        590 PRINT TAB(2); "No"; TAB(10); "NPM"; TAB(18); "Nama Mahasiswa"; TAB(35); "Nilai UTS"; TAB(47); "Nilai UAS"; TAB(58); "Rata-rata"; TAB(70); "Huruf Mutu": COLOR 7
+        600 PRINT STRING$(80, "-")
+        610 DO UNTIL EOF(1)
+            615 INPUT #1, mhs.NMA$, mhs.NPM$, mhs.KLS$, UTS, UAS
+            310 R = (UTS * 0.7) + (UAS * 0.3)
+            320 IF R > 85 THEN Ket = "A": GOTO 616
+            340 IF R > 75 THEN Ket = "B": GOTO 616
+            350 IF R > 65 THEN Ket = "C": GOTO 616
+            360 IF R > 55 THEN Ket = "D": GOTO 616
+            370 Ket = "E"
+            616 No = No + 1
+            PRINT TAB(1); No; TAB(7); mhs.NPM$; TAB(18); mhs.NMA$; TAB(36); UTS; TAB(50); UAS; TAB(58); R; TAB(73); Ket
+        620 LOOP
+        PRINT STRING$(80, "-")
+        630 CLOSE #1:
+        OPEN "ProgramMahasiswa.DAT" FOR INPUT AS #1
+        OPEN "tumbal2.DAT" FOR OUTPUT AS #2
+        DO UNTIL EOF(1)
+            INPUT #1, mhs.NMA$, mhs.NPM$, mhs.KLS$, UTS, UAS
+            WRITE #2, mhs.NMA$, mhs.NPM$, mhs.KLS$, UTS, UAS
+        LOOP
+        CLOSE #1: CLOSE #2
+        640 PRINT
+        650 PRINT "[1] Menu Awal    [3] Hapus Data"
+        655 PRINT "[2] Edit Data    [4] Keluar"
+        670 INPUT "Masukkan pilihan [1/2/3/4]:"; opt3
+        SELECT CASE opt3
+            CASE 1
+                GOTO 10
+            CASE 2
+                PRINT
+                677 INPUT "Edit Baris Ke- , [0] Untuk membatalkan: "; brs$
+                IF brs$ = "0" THEN
+                    GOTO 550
+                ELSEIF brs <= No THEN
+                    GOTO 678
+                ELSE
+                    SOUND 2000, 5
+                    COLOR 4: PRINT "Baris tidak ada!": COLOR 7
+                    GOTO 677
+                END IF
+                678 PRINT
+                PRINT "[1] Edit NPM     [3] Edit Nilai UTS      [5] Batal"
+                PRINT "[2] Edit Nama    [4] Edit Nilai UAS"
+                700 INPUT "Pilihan [1/2/3/4]: "; pil
+                SELECT CASE pil
+                    CASE 1
+                        BARIS = 0
+                        OPEN "tumbal2.DAT" FOR INPUT AS #1
+                        OPEN "ProgramMahasiswa.DAT" FOR OUTPUT AS #2
+                        DO UNTIL EOF(1)
+                            INPUT #1, mhs.NMA$, mhs.NPM$, mhs.KLS$, UTS, UAS
+                            BARIS = BARIS + 1
+                            IF BARIS = brs THEN
+                                INPUT "NPM Baru:"; mhs.NPM$
+                            END IF
+                            WRITE #2, mhs.NMA$, mhs.NPM$, mhs.KLS$, UTS, UAS
+                        LOOP
+                        CLOSE #2
+                        CLOSE #1
+                        KILL "tumbal2.dat"
+                        PRINT: COLOR 4
+                        PRINT "Data telah terubah!": COLOR 7
+                        PRINT "[Spasi]"
+                        SLEEP
+                        GOTO 550
+                        ''''''''''''''''''''''''''Edit Nama Mahasiswa''''''''''''''''''''''''
+                    CASE 2
+                        BARIS = 0
+                        OPEN "tumbal2.dat" FOR INPUT AS #1
+                        OPEN "ProgramMahasiswa.DAT" FOR OUTPUT AS #2
+                        DO UNTIL EOF(1)
+                            INPUT #1, mhs.NMA$, mhs.NPM$, mhs.KLS$, UTS, UAS
+                            BARIS = BARIS + 1
+                            IF BARIS = brs THEN
+                                INPUT "Nama Baru:"; mhs.NMA$
+                            END IF
+                            WRITE #2, mhs.NMA$, mhs.NPM$, mhs.KLS$, UTS, UAS
+                        LOOP
+                        CLOSE #2
+                        CLOSE #1
+                        KILL "tumbal2.dat"
+                        PRINT: COLOR 4
+                        PRINT "Data telah terubah!": COLOR 7
+                        PRINT "[Spasi]"
+                        SLEEP
+                        GOTO 550
+                        '''''''''''''''''''''''''''Edit nilai UTS''''''''''''''''''''''''''''''''''''
+                    CASE 3
+                        BARIS = 0
+                        OPEN "tumbal2.dat" FOR INPUT AS #1
+                        OPEN "ProgramMahasiswa.DAT" FOR OUTPUT AS #2
+                        DO UNTIL EOF(1)
+                            INPUT #1, mhs.NMA$, mhs.NPM$, mhs.KLS$, UTS, UAS
+                            BARIS = BARIS + 1
+                            IF BARIS = brs THEN
+                                INPUT "Nilai UTS Baru :"; UTS
+                            END IF
+                            WRITE #2, mhs.NMA$, mhs.NPM$, mhs.KLS$, UTS, UAS
+                        LOOP
+                        CLOSE #2
+                        CLOSE #1
+                        KILL "tumbal2.dat"
+                        PRINT: COLOR 4
+                        PRINT "Data telah terubah!": COLOR 7
+                        PRINT "[Spasi]"
+                        SLEEP
+                        GOTO 550
+                        '''''''''''''''''''''''''''''Edit nilai UAS'''''''''''''''''''''''''''''''''
+                    CASE 4
+                        BARIS = 0
+                        OPEN "tumbal2.dat" FOR INPUT AS #1
+                        OPEN "ProgramMahasiswa.DAT" FOR OUTPUT AS #2
+                        DO UNTIL EOF(1)
+                            INPUT #1, mhs.NMA$, mhs.NPM$, mhs.KLS$, UTS, UAS
+                            BARIS = BARIS + 1
+                            IF BARIS = brs THEN
+                                INPUT "Nilai UAS Baru:"; UAS
+                            END IF
+                            WRITE #2, mhs.NMA$, mhs.NPM$, mhs.KLS$, UTS, UAS
+                        LOOP
+                        CLOSE #2
+                        CLOSE #1
+                        KILL "tumbal2.dat"
+                        PRINT: COLOR 4
+                        PRINT "Data telah terubah!": COLOR 7
+                        PRINT "[Spasi]"
+                        SLEEP
+                        GOTO 550
+
+                    CASE 5
+                        GOTO 550
+                    CASE IS <> 1 OR 2 OR 3 OR 4 OR 5
+                        PRINT: COLOR 4
+                        PRINT "Data telah terubah!": COLOR 7
+                        PRINT "[Spasi]"
+                        SLEEP
+                        GOTO 550
+                END SELECT
+                ''''''''''''''''''''''''''''Untuk Hapus Data''''''''''''''''''''''''''''''''''''''''''''''''''
+            CASE 3
+                PRINT
+                PRINT "[1] Hapus Baris    [3] Menu Awal"
+                PRINT "[2] Hapus Semua    [4] Batal"
+                750 INPUT "Pilihan Anda [1/2/3]: "; pil2
+                SELECT CASE pil2
+                    CASE 1
+                        PRINT
+                        INPUT "Hapus Baris Ke- , [0] Untuk membatalkan : "; brs
+                        IF brs > 0 THEN
+                            BARIS = 0
+                            OPEN "tumbal2.DAT" FOR INPUT AS #1
+                            OPEN "ProgramMahasiswa.DAT" FOR OUTPUT AS #2
+                            DO UNTIL EOF(1)
+                                INPUT #1, mhs.NMA$, mhs.NPM$, mhs.KLS$, UTS, UAS
+                                BARIS = BARIS + 1
+                                IF BARIS <> brs THEN
+                                    WRITE #2, mhs.NMA$, mhs.NPM$, mhs.KLS$, UTS, UAS
+                                END IF
+                            LOOP
+                            CLOSE #2
+                            CLOSE #1
+                            KILL "tumbal2.DAT"
+                            GOTO 550
+                        ELSEIF brs = 0 THEN
+                            GOTO 550
+                        ELSE
+                            SOUND 2000, 5
+                            COLOR 4
+                            PRINT "Pilihan anda tidak ada!": COLOR 7
+                            GOTO 750
+                        END IF
+                        '''''''''''''''''''''''''''''''''Hapus Semua''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                    CASE 2
+                        PRINT
+                        DIM opt2 AS STRING: COLOR 4
+                        751 INPUT "Menghapus Semua Data[Y/T]: "; opt2: COLOR 7
+                        IF opt2 = "Y" OR opt2 = "y" THEN
+                            KILL "ProgramMahasiswa.DAT"
+                            740 CLS
+                            OPEN "ProgramMahasiswa.DAT" FOR APPEND AS #1
+                            PRINT "Semua Data Terhapus!"
+                            PRINT
+                            PRINT "[1] Menu awal"
+                            PRINT "[2] Keluar"
+                            PRINT
+                            CLOSE #1
+                            780 INPUT "Masukkan Pilihan [1/2] :"; opt4
+                            IF opt4 = 1 THEN
+                                GOTO 10
+                            ELSEIF opt4 = 2 THEN
+                                GOTO 10000
+                            ELSEIF opt4 <> 1 OR opt4 <> 2 THEN
+                                SOUND 2000, 5
+                                COLOR 4
+                                PRINT "Pilihan anda tidak ada!"
+                                COLOR 7
+                                GOTO 780
+                            END IF
+                        ELSEIF opt2 = "T" OR opt2 = "t" THEN GOTO 550
+                        ELSE
+                            SOUND 2000, 5
+                            COLOR 4
+                            PRINT "Pilihan anda tidak ada!"
+                            COLOR 7
+                            GOTO 600
+                        END IF
+                        ''''''''''''''''''''''
+                    CASE 3
+                        GOTO 10
+                    CASE IS <> 1 OR 2 OR 3
+                        SOUND 2000, 5
+                        COLOR 4
+                        PRINT "Pilihan anda tidak ada!"
+                        COLOR 7
+                        GOTO 750
+                END SELECT
+            CASE 4
+                GOTO 10000
+            CASE IS <> 1 OR 2 OR 3 OR 4
+                SOUND 2000, 5
+                COLOR 4
+                PRINT "Pilihan anda tidak ada!"
+                COLOR 7
+                GOTO 670
+        END SELECT
+    CASE IS <> 1 OR 2 OR 3
+        SOUND 2000, 5
+        COLOR 4
+        PRINT "Pilihan anda tidak ada!"
+        COLOR 7
+        GOTO 140
+END SELECT
+10000 END
